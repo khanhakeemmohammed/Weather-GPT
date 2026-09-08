@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WeatherGPT - AI powered weather assistant" />
+
+  <title>WeatherGPT</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Background -->
+  <div class="background-glow glow-one"></div>
+  <div class="background-glow glow-two"></div>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-icon">☁️</div>
+      <div>
+        <h1>WeatherGPT</h1>
+        <span>AI Weather Assistant</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button class="icon-button" id="unitToggle" title="Change temperature unit">
+        °C
+      </button>
+
+      <button class="icon-button" id="themeToggle" title="Toggle theme">
+        ☀️
+      </button>
+    </div>
+  </header>
+
+
+  <!-- Main -->
+  <main class="main-container">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        Weather intelligence online
+      </div>
+
+      <h2>
+        Your weather.
+        <span>Your questions.</span>
+      </h2>
+
+      <p>
+        Ask WeatherGPT about today's weather, forecasts, rain,
+        temperature, wind, UV, sunrise, sunset and more.
+      </p>
+    </section>
+
+
+    <!-- Search -->
+    <section class="search-section">
+
+      <div class="search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+          type="text"
+          id="locationInput"
+          placeholder="Enter a city..."
+          autocomplete="off"
+        />
+
+        <button id="locationButton" class="location-button" title="Use my location">
+          📍
+        </button>
+
+        <button id="searchButton" class="search-button">
+          Search
+        </button>
+
+      </div>
+
+      <div class="quick-cities">
+        <button data-city="Hyderabad">Hyderabad</button>
+        <button data-city="Delhi">Delhi</button>
+        <button data-city="Mumbai">Mumbai</button>
+        <button data-city="Bengaluru">Bengaluru</button>
+      </div>
+
+    </section>
+
+
+    <!-- Weather Dashboard -->
+    <section class="dashboard">
+
+      <!-- Main weather card -->
+      <div class="weather-main card">
+
+        <div class="weather-location">
+          <div>
+            <span class="small-label">CURRENT WEATHER</span>
+            <h3 id="cityName">Hyderabad</h3>
+            <p id="currentDate">Loading date...</p>
+          </div>
+
+          <div class="weather-icon" id="weatherIcon">
+            ☀️
+          </div>
+        </div>
+
+        <div class="temperature-row">
+          <div class="temperature" id="temperature">
+            28°
+          </div>
+
+          <div class="temperature-info">
+            <strong id="condition">Clear Sky</strong>
+            <span>Feels like <b id="feelsLike">30°</b></span>
+          </div>
+        </div>
+
+        <div class="weather-description" id="weatherDescription">
+          A clear and pleasant day is expected.
+        </div>
+
+        <div class="weather-stats">
+
+          <div class="stat">
+            <span>💧</span>
+            <div>
+              <small>Humidity</small>
+              <strong id="humidity">65%</strong>
+            </div>
+          </div>
+
+          <div class="stat">
+            <span>💨</span>
+            <div>
+              <small>Wind</small>
+              <strong id="wind">12 km/h</strong>
+            </div>
+          </div>
+
+          <div class="stat">
+            <span>☀️</span>
+            <div>
+              <small>UV Index</small>
+              <strong id="uv">5</strong>
+            </div>
+          </div>
+
+          <div class="stat">
+            <span>🌧️</span>
+            <div>
+              <small>Rain Chance</small>
+              <strong id="rainChance">10%</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Sunrise / Sunset -->
+      <div class="sun-card card">
+
+        <div class="card-heading">
+          <div>
+            <span class="small-label">SUN & DAYLIGHT</span>
+            <h3>Today's Sky</h3>
+          </div>
+
+          <span class="sun-symbol">🌅</span>
+        </div>
+
+        <div class="sun-times">
+
+          <div class="sun-time">
+            <div class="sun-circle sunrise">🌅</div>
+            <div>
+              <small>Sunrise</small>
+              <strong id="sunrise">6:05 AM</strong>
+            </div>
+          </div>
+
+          <div class="sun-line">
+            <span></span>
+          </div>
+
+          <div class="sun-time">
+            <div class="sun-circle sunset">🌇</div>
+            <div>
+              <small>Sunset</small>
+              <strong id="sunset">6:32 PM</strong>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="daylight">
+          <span>☀️ Daylight</span>
+          <strong id="daylight">12h 27m</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Forecast -->
+    <section class="forecast-section">
+
+      <div class="section-heading">
+        <div>
+          <span class="small-label">FORECAST</span>
+          <h3>Next 5 Days</h3>
+        </div>
+
+        <span class="forecast-status">Updated just now</span>
+      </div>
+
+      <div class="forecast-grid" id="forecastGrid">
+
+        <div class="forecast-card">
+          <span>Today</span>
+          <div class="forecast-icon">☀️</div>
+          <strong>31° / 23°</strong>
+          <small>Clear</small>
+        </div>
+
+        <div class="forecast-card">
+          <span>Tomorrow</span>
+          <div class="forecast-icon">🌤️</div>
+          <strong>30° / 22°</strong>
+          <small>Partly cloudy</small>
+        </div>
+
+        <div class="forecast-card">
+          <span>Wed</span>
+          <div class="forecast-icon">🌧️</div>
+          <strong>28° / 22°</strong>
+          <small>Rain possible</small>
+        </div>
+
+        <div class="forecast-card">
+          <span>Thu</span>
+          <div class="forecast-icon">⛅</div>
+          <strong>29° / 21°</strong>
+          <small>Cloudy</small>
+        </div>
+
+        <div class="forecast-card">
+          <span>Fri</span>
+          <div class="forecast-icon">☀️</div>
+          <strong>31° / 22°</strong>
+          <small>Sunny</small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- AI Chat -->
+    <section class="ai-section card">
+
+      <div class="ai-header">
+
+        <div class="ai-title">
+          <div class="ai-avatar">🤖</div>
+
+          <div>
+            <span class="small-label">WEATHERGPT AI</span>
+            <h3>Ask your weather assistant</h3>
+          </div>
+        </div>
+
+        <span class="ai-online">
+          <span></span> Online
+        </span>
+
+      </div>
+
+
+      <div class="chat-messages" id="chatMessages">
+
+        <div class="message ai-message">
+          <div class="message-avatar">🤖</div>
+
+          <div class="message-content">
+            <p>
+              Hi! I'm WeatherGPT. 🌦️ Ask me anything about the weather.
+            </p>
+
+            <span class="message-time">Just now</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="suggestions">
+
+        <button data-question="Will it rain today?">
+          🌧️ Will it rain today?
+        </button>
+
+        <button data-question="What should I wear today?">
+          👕 What should I wear?
+        </button>
+
+        <button data-question="Is it a good day to go outside?">
+          🌳 Good day to go outside?
+        </button>
+
+        <button data-question="What is the weather tomorrow?">
+          📅 Tomorrow's weather?
+        </button>
+
+      </div>
+
+
+      <div class="chat-input">
+
+        <input
+          type="text"
+          id="chatInput"
+          placeholder="Ask WeatherGPT anything..."
+        />
+
+        <button id="sendButton">
+          ➤
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      WeatherGPT • AI-powered conversational weather intelligence
+    </p>
+
+    <span>
+      Built for Hackathon 🚀
+    </span>
+  </footer>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
