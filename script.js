@@ -2572,7 +2572,409 @@ async function answerWeatherQuestion(
       advice
     );
   }
+  
+    // ----------------------------------------------------------
+  // 🌾 FARMER SUPPORT
+  // ----------------------------------------------------------
 
+  if (
+    q.includes("farmer") ||
+    q.includes("farm") ||
+    q.includes("crop") ||
+    q.includes("crops") ||
+    q.includes("irrigation") ||
+    q.includes("watering") ||
+    q.includes("sowing") ||
+    q.includes("harvesting") ||
+    q.includes("harvest") ||
+    q.includes("fertilizer") ||
+    q.includes("fertiliser") ||
+    q.includes("pest") ||
+    q.includes("pests") ||
+    q.includes("disease") ||
+    q.includes("farming") ||
+    q.includes("kisan") ||
+    q.includes("kheti") ||
+    q.includes("fasal") ||
+    q.includes("paani") ||
+    q.includes("sinchai") ||
+    q.includes("खेती") ||
+    q.includes("फसल") ||
+    q.includes("किसान") ||
+    q.includes("सिंचाई") ||
+    q.includes("నీరు") ||
+    q.includes("పంట") ||
+    q.includes("వ్యవసాయం")
+  ) {
+    return farmerSupport(question);
+  }
+    // ----------------------------------------------------------
+  // 🌾 FARMER SUPPORT
+  // ----------------------------------------------------------
+
+  // 🌱 CROP RECOMMENDATIONS
+  if (
+    q.includes("crop") ||
+    q.includes("which crop") ||
+    q.includes("what crop") ||
+    q.includes("best crop") ||
+    q.includes("farming") ||
+    q.includes("konsa crop") ||
+    q.includes("kaunsi fasal") ||
+    q.includes("kya ugau") ||
+    q.includes("फसल") ||
+    q.includes("खेती") ||
+    q.includes("పంట") ||
+    q.includes("వ్యవసాయం")
+  ) {
+    let cropAdvice;
+
+    if (Number(rain) >= 70 && Number(temp) >= 20 && Number(temp) <= 32) {
+      cropAdvice =
+        `The current weather in ${location} is relatively warm with a high chance of rain. Water-loving or rain-tolerant crops may be suitable, but avoid sowing immediately if heavy rain is expected.`;
+    } else if (Number(temp) >= 32) {
+      cropAdvice =
+        `Temperatures are high in ${location}. Heat-tolerant crops may be more suitable, and irrigation should be managed carefully.`;
+    } else if (Number(temp) <= 15) {
+      cropAdvice =
+        `Temperatures are relatively low in ${location}. Consider crops that tolerate cooler conditions and protect sensitive crops from cold.`;
+    } else {
+      cropAdvice =
+        `The current weather in ${location} is moderately suitable for several crops. Crop choice should also depend on soil type, season, water availability, and local farming conditions.`;
+    }
+
+    return languageMessage(
+      `🌾 Crop advice for ${location}: ${cropAdvice}`
+    );
+  }
+
+
+  // 🌱 WHEN SHOULD I SOW MY SEEDS?
+  if (
+    q.includes("when should i sow") ||
+    q.includes("when to sow") ||
+    q.includes("sow my seeds") ||
+    q.includes("sowing") ||
+    q.includes("sowing time") ||
+    q.includes("seed sow") ||
+    q.includes("kab boya") ||
+    q.includes("kab bo") ||
+    q.includes("beej kab") ||
+    q.includes("बीज कब") ||
+    q.includes("बुवाई कब") ||
+    q.includes("విత్తనాలు ఎప్పుడు")
+  ) {
+    if (Number(rain) >= 70) {
+      return languageMessage(
+        `🌱 Sowing advice for ${location}: Rain probability is ${rain}% today. It may be better to avoid sowing immediately if heavy rain is expected, because excessive rainfall can affect newly sown seeds. Check the soil moisture and upcoming forecast before sowing.`
+      );
+    }
+
+    if (Number(temp) >= 35) {
+      return languageMessage(
+        `🌱 Sowing advice for ${location}: Temperatures are currently high at ${temperatureText(
+          temp
+        )}${unitName}. Avoid sowing heat-sensitive seeds during very hot conditions. Prefer a cooler period when soil moisture is suitable.`
+      );
+    }
+
+    return languageMessage(
+      `🌱 Sowing advice for ${location}: Current weather appears reasonably suitable for sowing, but the correct sowing time depends strongly on the crop, local season, soil moisture, and upcoming rainfall. Check the crop-specific recommendation before sowing.`
+    );
+  }
+
+
+  // 🌾 SHOULD I GO FARMING TODAY?
+  if (
+    q.includes("should i farm today") ||
+    q.includes("go farming today") ||
+    q.includes("farming today") ||
+    q.includes("farm today") ||
+    q.includes("can i farm today") ||
+    q.includes("farming today or not") ||
+    q.includes("aaj farming") ||
+    q.includes("aaj kheti") ||
+    q.includes("aaj khet") ||
+    q.includes("आज खेती") ||
+    q.includes("आज खेत") ||
+    q.includes("ఈరోజు వ్యవసాయం")
+  ) {
+    if (Number(rain) >= 70) {
+      return languageMessage(
+        `🚜 Farming advice for ${location}: It may not be a good day for outdoor farm work because the rain probability is ${rain}%. Consider postponing non-urgent field work if heavy rain is expected.`
+      );
+    }
+
+    if (Number(windValue) >= 40) {
+      return languageMessage(
+        `🚜 Farming advice for ${location}: Strong winds are currently present at around ${windValue} km/h. Be cautious with outdoor farm work and avoid activities that could be affected by strong winds.`
+      );
+    }
+
+    if (Number(temp) >= 38) {
+      return languageMessage(
+        `🚜 Farming advice for ${location}: It is quite hot at ${temperatureText(
+          temp
+        )}${unitName}. If possible, do physically demanding farm work during cooler parts of the day and take regular breaks.`
+      );
+    }
+
+    return languageMessage(
+      `🚜 Farming advice for ${location}: Today's conditions appear reasonably suitable for outdoor farming activities. Current temperature is ${temperatureText(
+        temp
+      )}${unitName}, rain probability is ${rain}%, and wind speed is ${windValue} km/h.`
+    );
+  }
+
+
+  // 🌾 HARVESTING
+  if (
+    q.includes("when should i harvest") ||
+    q.includes("when to harvest") ||
+    q.includes("harvest my crop") ||
+    q.includes("harvesting") ||
+    q.includes("harvest crops") ||
+    q.includes("crop harvest") ||
+    q.includes("kab harvest") ||
+    q.includes("kab fasal kaatu") ||
+    q.includes("फसल कब काट") ||
+    q.includes("कटाई कब") ||
+    q.includes("ఎప్పుడు కోయాలి")
+  ) {
+    if (Number(rain) >= 60) {
+      return languageMessage(
+        `🌾 Harvesting advice for ${location}: Rain probability is ${rain}% today. If the crop is ready for harvest, check the upcoming forecast and consider harvesting during a sufficiently dry period to reduce the risk of moisture damage.`
+      );
+    }
+
+    return languageMessage(
+      `🌾 Harvesting advice for ${location}: Current weather does not show a very high rain risk today. If your crop has reached its proper maturity, a dry period is generally more suitable for harvesting. Exact harvest timing depends on the crop and its maturity signs.`
+    );
+  }
+
+
+  // 💧 IRRIGATION / WATERING
+  if (
+    q.includes("irrigation") ||
+    q.includes("watering") ||
+    q.includes("water my crop") ||
+    q.includes("water crops") ||
+    q.includes("should i water") ||
+    q.includes("paani dena") ||
+    q.includes("pani dena") ||
+    q.includes("fasal ko pani") ||
+    q.includes("सिंचाई") ||
+    q.includes("पानी देना") ||
+    q.includes("నీరు పెట్టాలి")
+  ) {
+    if (Number(rain) >= 60) {
+      return languageMessage(
+        `💧 Irrigation advice for ${location}: Rain probability is ${rain}%, so additional irrigation may not be necessary if sufficient rainfall occurs. Check actual soil moisture before watering.`
+      );
+    }
+
+    if (Number(temp) >= 35) {
+      return languageMessage(
+        `💧 Irrigation advice for ${location}: Temperatures are high at ${temperatureText(
+          temp
+        )}${unitName}. Monitor soil moisture carefully and provide appropriate irrigation according to the crop's needs.`
+      );
+    }
+
+    return languageMessage(
+      `💧 Irrigation advice for ${location}: There is no very high rain probability today. Check the soil moisture before irrigating and avoid unnecessary watering.`
+    );
+  }
+
+
+  // 🌧️ RAIN-BASED FARMING
+  if (
+    q.includes("rain farming") ||
+    q.includes("rain based") ||
+    q.includes("rain for farming") ||
+    q.includes("rain affect crop") ||
+    q.includes("baarish se crop") ||
+    q.includes("baarish se fasal") ||
+    q.includes("बारिश से फसल") ||
+    q.includes("వర్షం పంట")
+  ) {
+    if (Number(rain) >= 70) {
+      return languageMessage(
+        `🌧️ Rain-based farming advice for ${location}: Rain probability is ${rain}%. Avoid unnecessary irrigation and be careful with harvesting, spraying, and field operations before heavy rainfall.`
+      );
+    }
+
+    if (Number(rain) <= 20) {
+      return languageMessage(
+        `🌧️ Rain-based farming advice for ${location}: Rain probability is only ${rain}%. Monitor soil moisture and irrigation requirements, especially for crops that need regular water.`
+      );
+    }
+
+    return languageMessage(
+      `🌧️ Rain-based farming advice for ${location}: There is a ${rain}% chance of rain. Monitor the forecast and soil moisture before deciding on irrigation or field work.`
+    );
+  }
+
+
+  // 🌡️ HEAT / COLD CROP ALERT
+  if (
+    q.includes("crop heat") ||
+    q.includes("crop cold") ||
+    q.includes("heat alert") ||
+    q.includes("cold alert") ||
+    q.includes("too hot for crops") ||
+    q.includes("too cold for crops") ||
+    q.includes("garmi se crop") ||
+    q.includes("thand se crop") ||
+    q.includes("गर्मी से फसल") ||
+    q.includes("ठंड से फसल")
+  ) {
+    if (Number(temp) >= 38) {
+      return languageMessage(
+        `🌡️ Heat alert for crops in ${location}: The temperature is ${temperatureText(
+          temp
+        )}${unitName}. Heat-sensitive crops may experience stress. Monitor soil moisture and provide appropriate crop protection.`
+      );
+    }
+
+    if (Number(temp) <= 10) {
+      return languageMessage(
+        `🌡️ Cold alert for crops in ${location}: The temperature is ${temperatureText(
+          temp
+        )}${unitName}. Cold-sensitive crops may need protection from low temperatures.`
+      );
+    }
+
+    return languageMessage(
+      `🌡️ Crop temperature alert for ${location}: Current temperature is ${temperatureText(
+        temp
+      )}${unitName}. There is no strong heat or cold stress signal from the current temperature alone.`
+    );
+  }
+
+
+  // 🐛 PEST / DISEASE WARNING
+  if (
+    q.includes("pest") ||
+    q.includes("pests") ||
+    q.includes("crop disease") ||
+    q.includes("plant disease") ||
+    q.includes("disease warning") ||
+    q.includes("insect") ||
+    q.includes("keede") ||
+    q.includes("keeda") ||
+    q.includes("fasal ki bimari") ||
+    q.includes("कीड़े") ||
+    q.includes("फसल की बीमारी") ||
+    q.includes("పురుగులు") ||
+    q.includes("పంట వ్యాధి")
+  ) {
+    if (
+      Number(humidityValue) >= 75 &&
+      Number(temp) >= 20 &&
+      Number(temp) <= 32
+    ) {
+      return languageMessage(
+        `🐛 Pest and disease warning for ${location}: Humidity is ${humidityValue}% and the temperature is ${temperatureText(
+          temp
+        )}${unitName}. Warm and humid conditions can increase the risk of some crop pests and diseases. Inspect leaves and plants regularly for unusual spots, insects, or damage.`
+      );
+    }
+
+    return languageMessage(
+      `🐛 Pest and disease advice for ${location}: Current weather does not strongly indicate a general pest or disease risk. However, inspect crops regularly because pest and disease risk depends on the crop and local conditions.`
+    );
+  }
+
+
+  // 🧪 FERTILIZER GUIDANCE
+  if (
+    q.includes("fertilizer") ||
+    q.includes("fertiliser") ||
+    q.includes("fertilizer advice") ||
+    q.includes("fertiliser advice") ||
+    q.includes("khad") ||
+    q.includes("khaad") ||
+    q.includes("खाद") ||
+    q.includes("ఎరువు")
+  ) {
+    if (Number(rain) >= 70) {
+      return languageMessage(
+        `🧪 Fertilizer advice for ${location}: Rain probability is ${rain}%. Avoid applying fertilizer immediately before heavy rain because nutrients may be washed away. Follow the fertilizer recommendation for your specific crop and soil.`
+      );
+    }
+
+    return languageMessage(
+      `🧪 Fertilizer advice for ${location}: Current rain conditions do not show a very high risk of immediate rainfall. Apply fertilizer according to your crop, soil test, growth stage, and recommended dosage.`
+    );
+  }
+
+
+  // 🚜 GENERAL FARMING TIPS
+  if (
+    q.includes("farming tips") ||
+    q.includes("farm tips") ||
+    q.includes("farming advice") ||
+    q.includes("farmer advice") ||
+    q.includes("kheti tips") ||
+    q.includes("kisan advice") ||
+    q.includes("खेती की सलाह") ||
+    q.includes("किसान सलाह") ||
+    q.includes("వ్యవసాయ సలహా")
+  ) {
+    return languageMessage(
+      `🚜 Farming tips for ${location}: Monitor soil moisture, check the weather before irrigation or spraying, inspect crops for pests and disease, avoid unnecessary watering before rain, and plan field work around heat, wind, and rainfall.`
+    );
+  }
+
+
+  // 🔔 FARMER WEATHER ALERTS
+  if (
+    q.includes("farmer alert") ||
+    q.includes("farm alert") ||
+    q.includes("crop alert") ||
+    q.includes("farming alert") ||
+    q.includes("kisan alert") ||
+    q.includes("kisan warning") ||
+    q.includes("किसान चेतावनी") ||
+    q.includes("పంట హెచ్చరిక")
+  ) {
+    let farmerAlert = "";
+
+    if (Number(rain) >= 70) {
+      farmerAlert +=
+        `🌧️ High rain risk (${rain}%). `;
+    }
+
+    if (Number(temp) >= 38) {
+      farmerAlert +=
+        `🌡️ High heat (${temperatureText(temp)}${unitName}). `;
+    }
+
+    if (Number(temp) <= 10) {
+      farmerAlert +=
+        `❄️ Low temperature (${temperatureText(temp)}${unitName}). `;
+    }
+
+    if (Number(windValue) >= 40) {
+      farmerAlert +=
+        `💨 Strong winds (${windValue} km/h). `;
+    }
+
+    if (Number(humidityValue) >= 80) {
+      farmerAlert +=
+        `💧 Very high humidity (${humidityValue}%). `;
+    }
+
+    if (!farmerAlert) {
+      farmerAlert =
+        "No major farmer-specific weather risk is detected from the current weather data.";
+    }
+
+    return languageMessage(
+      `🔔 Farmer weather alerts for ${location}: ${farmerAlert}`
+    );
+  }
   // ----------------------------------------------------------
   // DEFAULT
   // ----------------------------------------------------------
@@ -2976,6 +3378,406 @@ function translateToHinglish(text) {
 }
 
 // ============================================================
+// FARMER SUPPORT SYSTEM
+// ============================================================
+
+function farmerSupport(question) {
+  if (!currentWeather || !currentLocation) {
+    return languageMessage(
+      "Please search for a city first so I can provide farmer support based on the local weather. 📍🌾"
+    );
+  }
+
+  const current = currentWeather.current;
+  const daily = currentWeather.daily;
+
+  const location = currentLocation.name;
+
+  const temp = Number(current.temperature_2m ?? 0);
+  const humidity = Number(
+    current.relative_humidity_2m ?? 0
+  );
+
+  const wind = Math.round(
+    Number(current.wind_speed_10m ?? 0)
+  );
+
+  const uv = Math.round(
+    Number(current.uv_index ?? 0)
+  );
+
+  const todayIndex = 5;
+
+  const rainChance = Number(
+    daily.precipitation_probability_max?.[
+      todayIndex
+    ] ?? 0
+  );
+
+  const precipitation = Number(
+    daily.precipitation_sum?.[
+      todayIndex
+    ] ?? 0
+  );
+
+  const q = question.toLowerCase().trim();
+
+  // ==========================================================
+  // 🌾 CROP RECOMMENDATIONS
+  // ==========================================================
+
+  if (
+    q.includes("crop") ||
+    q.includes("crops") ||
+    q.includes("fasal") ||
+    q.includes("fasle") ||
+    q.includes("panta") ||
+    q.includes("పంట") ||
+    q.includes("खेती")
+  ) {
+    let crops = [];
+
+    if (
+      temp >= 25 &&
+      temp <= 35 &&
+      rainChance >= 50
+    ) {
+      crops = [
+        "rice/paddy",
+        "maize",
+        "cotton",
+        "vegetables"
+      ];
+    } else if (
+      temp >= 20 &&
+      temp <= 30
+    ) {
+      crops = [
+        "maize",
+        "groundnut",
+        "vegetables",
+        "pulses"
+      ];
+    } else if (temp < 20) {
+      crops = [
+        "wheat",
+        "chickpea",
+        "peas",
+        "some cool-season vegetables"
+      ];
+    } else {
+      crops = [
+        "millets",
+        "pulses",
+        "groundnut",
+        "heat-tolerant vegetables"
+      ];
+    }
+
+    return languageMessage(
+      `For ${location}, based on the current temperature of ${temp}°C and ${rainChance}% rain probability, weather conditions may be suitable for crops such as ${crops.join(
+        ", "
+      )}. 🌾 Always consider soil type, season, irrigation availability and local agricultural recommendations before selecting a crop.`
+    );
+  }
+
+  // ==========================================================
+  // 💧 IRRIGATION / WATERING
+  // ==========================================================
+
+  if (
+    q.includes("irrigation") ||
+    q.includes("water crop") ||
+    q.includes("watering") ||
+    q.includes("water my") ||
+    q.includes("paani") ||
+    q.includes("sinchai") ||
+    q.includes("सिंचाई") ||
+    q.includes("पानी") ||
+    q.includes("నీరు") ||
+    q.includes("సాగునీరు")
+  ) {
+    if (rainChance >= 70) {
+      return languageMessage(
+        `Irrigation may not be necessary immediately in ${location} because today's rain probability is ${rainChance}%. Check the soil moisture before watering. 💧🌧️`
+      );
+    }
+
+    if (temp >= 35) {
+      return languageMessage(
+        `It is quite warm in ${location} at ${temp}°C. Monitor soil moisture closely and irrigate according to the crop's needs, preferably during cooler parts of the day. 💧🌡️`
+      );
+    }
+
+    return languageMessage(
+      `For ${location}, today's rain probability is ${rainChance}% and the temperature is ${temp}°C. Check soil moisture before irrigation and avoid unnecessary watering. 💧🌱`
+    );
+  }
+
+  // ==========================================================
+  // 🌧️ RAIN-BASED FARMING ADVICE
+  // ==========================================================
+
+  if (
+    q.includes("rain farming") ||
+    q.includes("rain advice") ||
+    q.includes("rain for crops") ||
+    q.includes("baarish se kheti") ||
+    q.includes("baarish") ||
+    q.includes("barish") ||
+    q.includes("वर्षा") ||
+    q.includes("వర్షం")
+  ) {
+    if (rainChance >= 70) {
+      return languageMessage(
+        `Rain probability is ${rainChance}% in ${location}. 🌧️ Consider postponing irrigation and avoid unnecessary field operations. Ensure drainage channels are clear and protect harvested produce from rain.`
+      );
+    }
+
+    if (rainChance >= 40) {
+      return languageMessage(
+        `There is a moderate rain possibility of ${rainChance}% in ${location}. 🌦️ Monitor the forecast, check drainage and avoid unnecessary irrigation.`
+      );
+    }
+
+    return languageMessage(
+      `Rain probability is relatively low at ${rainChance}% in ${location}. 🌤️ Monitor soil moisture and plan irrigation according to crop requirements.`
+    );
+  }
+
+  // ==========================================================
+  // 🌡️ HEAT / COLD CROP ALERT
+  // ==========================================================
+
+  if (
+    q.includes("heat alert") ||
+    q.includes("heat for crops") ||
+    q.includes("cold alert") ||
+    q.includes("cold for crops") ||
+    q.includes("temperature alert") ||
+    q.includes("garmi se fasal") ||
+    q.includes("thand se fasal") ||
+    q.includes("गरमी") ||
+    q.includes("ठंड") ||
+    q.includes("వేడి") ||
+    q.includes("చలి")
+  ) {
+    if (temp >= 38) {
+      return languageMessage(
+        `⚠️ Heat stress risk for crops in ${location}. The temperature is ${temp}°C. Monitor soil moisture, provide crop-appropriate irrigation, and protect sensitive crops from excessive heat where practical.`
+      );
+    }
+
+    if (temp <= 10) {
+      return languageMessage(
+        `⚠️ Cold stress may affect sensitive crops in ${location}. The temperature is ${temp}°C. Monitor vulnerable crops and follow crop-specific local protection advice.`
+      );
+    }
+
+    return languageMessage(
+      `No strong heat or cold stress signal is detected from the current temperature of ${temp}°C in ${location}. Continue monitoring the forecast and crop condition. 🌱`
+    );
+  }
+
+  // ==========================================================
+  // 🐛 PEST / DISEASE WEATHER WARNING
+  // ==========================================================
+
+  if (
+    q.includes("pest") ||
+    q.includes("pests") ||
+    q.includes("disease") ||
+    q.includes("fungus") ||
+    q.includes("insect") ||
+    q.includes("keeda") ||
+    q.includes("कीड़ा") ||
+    q.includes("रोग") ||
+    q.includes("చీడ") ||
+    q.includes("తెగులు")
+  ) {
+    if (
+      humidity >= 75 &&
+      rainChance >= 50
+    ) {
+      return languageMessage(
+        `⚠️ Weather conditions in ${location} are relatively humid (${humidity}%) with a ${rainChance}% rain probability. Such conditions can increase the risk of some fungal diseases and certain pests. Inspect leaves and crops regularly and follow crop-specific agricultural guidance before using any treatment. 🐛🌱`
+      );
+    }
+
+    if (humidity >= 70) {
+      return languageMessage(
+        `Humidity is ${humidity}% in ${location}. 🌱 Some crops may face increased disease pressure under humid conditions. Monitor plants regularly for unusual spots, wilting or insect activity.`
+      );
+    }
+
+    return languageMessage(
+      `Current weather in ${location} does not indicate a particularly high weather-related pest or fungal-risk signal. Continue regular crop monitoring. 🌾`
+    );
+  }
+
+  // ==========================================================
+  // 🌱 SOWING / HARVESTING
+  // ==========================================================
+
+  if (
+    q.includes("sowing") ||
+    q.includes("sow") ||
+    q.includes("planting") ||
+    q.includes("harvesting") ||
+    q.includes("harvest") ||
+    q.includes("buwai") ||
+    q.includes("fasal kab boya") ||
+    q.includes("fasal kab kaate") ||
+    q.includes("बुवाई") ||
+    q.includes("कटाई") ||
+    q.includes("విత్తనం") ||
+    q.includes("కోత")
+  ) {
+    if (rainChance >= 70) {
+      return languageMessage(
+        `With a ${rainChance}% rain probability in ${location}, avoid making a sowing or harvesting decision based on weather alone. Heavy rain can affect field access and harvested produce. Check soil conditions and the crop's recommended planting or harvesting window. 🌱🌧️`
+      );
+    }
+
+    if (rainChance <= 20) {
+      return languageMessage(
+        `Rain probability is only ${rainChance}% in ${location}. Before sowing, make sure adequate soil moisture or irrigation is available. For harvesting, dry conditions may be helpful, but crop maturity should be the main deciding factor. 🌾`
+      );
+    }
+
+    return languageMessage(
+      `Weather in ${location} has a ${rainChance}% rain probability. Check soil moisture, crop maturity and the crop's recommended seasonal window before sowing or harvesting. 🌱`
+    );
+  }
+
+  // ==========================================================
+  // 🧪 FERTILIZER GUIDANCE
+  // ==========================================================
+
+  if (
+    q.includes("fertilizer") ||
+    q.includes("fertiliser") ||
+    q.includes("fertilizer advice") ||
+    q.includes("khad") ||
+    q.includes("khaad") ||
+    q.includes("उर्वरक") ||
+    q.includes("खाद") ||
+    q.includes("ఎరువు")
+  ) {
+    if (rainChance >= 70) {
+      return languageMessage(
+        `Because rain probability is ${rainChance}% in ${location}, avoid applying fertilizer immediately before heavy rainfall because nutrients may be lost through runoff. Follow the crop-specific fertilizer schedule and local agricultural recommendations. 🧪🌧️`
+      );
+    }
+
+    return languageMessage(
+      `For ${location}, fertilizer decisions should depend on the crop, soil test, growth stage and recommended nutrient requirements. Avoid applying fertilizer just before significant rainfall, and follow local agricultural guidance for the correct product and amount. 🧪🌱`
+    );
+  }
+
+  // ==========================================================
+  // 🚜 GENERAL FARMING TIPS
+  // ==========================================================
+
+  if (
+    q.includes("farming tips") ||
+    q.includes("farm tips") ||
+    q.includes("farmer tips") ||
+    q.includes("farming advice") ||
+    q.includes("kheti tips") ||
+    q.includes("kheti advice") ||
+    q.includes("खेती") ||
+    q.includes("వ్యవసాయం")
+  ) {
+    return languageMessage(
+      `Farming tips for ${location}: 🌾 Monitor soil moisture, avoid unnecessary irrigation when rain is expected, inspect crops for pests and disease, keep drainage channels clear, monitor temperature stress, and plan field work around the weather forecast.`
+    );
+  }
+
+  // ==========================================================
+  // 📍 LOCATION-BASED FARM ADVICE
+  // ==========================================================
+
+  if (
+    q.includes("farmer weather") ||
+    q.includes("farm weather") ||
+    q.includes("weather for farming") ||
+    q.includes("farmer support") ||
+    q.includes("farmer") ||
+    q.includes("farm")
+  ) {
+    return languageMessage(
+      `Farmer weather summary for ${location}: 🌾 Temperature ${temp}°C, humidity ${humidity}%, wind ${wind} km/h, rain probability ${rainChance}%, and expected precipitation ${precipitation} mm. Use these conditions to plan irrigation, field work and crop monitoring.`
+    );
+  }
+
+  // ==========================================================
+  // 🔔 FARMER-SPECIFIC WEATHER ALERTS
+  // ==========================================================
+
+  if (
+    q.includes("farmer alert") ||
+    q.includes("farm alert") ||
+    q.includes("crop alert") ||
+    q.includes("agriculture alert") ||
+    q.includes("kisan alert") ||
+    q.includes("kisan warning") ||
+    q.includes("किसान चेतावनी") ||
+    q.includes("వ్యవసాయ హెచ్చరిక")
+  ) {
+    const alerts = [];
+
+    if (rainChance >= 70) {
+      alerts.push(
+        "🌧️ High rain probability: review irrigation and drainage plans."
+      );
+    }
+
+    if (temp >= 38) {
+      alerts.push(
+        "🌡️ High-temperature risk: monitor crops and soil moisture."
+      );
+    }
+
+    if (temp <= 10) {
+      alerts.push(
+        "❄️ Low-temperature risk: monitor temperature-sensitive crops."
+      );
+    }
+
+    if (
+      humidity >= 75 &&
+      rainChance >= 50
+    ) {
+      alerts.push(
+        "🐛 Humid/wet conditions may increase some pest or fungal disease risks. Inspect crops."
+      );
+    }
+
+    if (wind >= 40) {
+      alerts.push(
+        "💨 Strong winds: protect vulnerable crops and postpone risky field operations."
+      );
+    }
+
+    if (!alerts.length) {
+      alerts.push(
+        "✅ No major farmer-specific weather risk detected from the current weather data."
+      );
+    }
+
+    return languageMessage(
+      `Farmer weather alerts for ${location}:\n\n${alerts.join(
+        "\n"
+      )}`
+    );
+  }
+
+  return languageMessage(
+    `I can help with crop recommendations, irrigation, rain-based farming advice, heat/cold alerts, pest and disease risk, sowing, harvesting, fertilizer guidance, farming tips and farmer weather alerts for ${location}. 🌾`
+  );
+}
+// ============================================================
 // SEND CHAT MESSAGE
 // ============================================================
 
@@ -3110,4 +3912,4 @@ createVoiceButton();
 // STARTUP
 // ============================================================
 
-loadCity("Hyderabad");
+loadCity("Hyderabad");suno 
